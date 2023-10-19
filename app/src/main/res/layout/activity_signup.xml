@@ -173,4 +173,18 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.1" />
 
+    <TextView
+        android:id="@+id/passwordErrorTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="72dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginBottom="6dp"
+        android:text="@string/cek8"
+        app:layout_constraintBottom_toTopOf="@+id/signupButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/passwordEditTextLayout"
+        android:visibility="gone"
+        android:textColor="#FF0000"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

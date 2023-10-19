@@ -5,6 +5,7 @@ import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.text.Editable
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
@@ -15,11 +16,13 @@ import com.dicoding.picodiploma.loginwithanimation.data.pref.UserModel
 import com.dicoding.picodiploma.loginwithanimation.databinding.ActivityLoginBinding
 import com.dicoding.picodiploma.loginwithanimation.view.ViewModelFactory
 import com.dicoding.picodiploma.loginwithanimation.view.main.MainActivity
+import android.text.TextWatcher
 
 class LoginActivity : AppCompatActivity() {
     private val viewModel by viewModels<LoginViewModel> {
         ViewModelFactory.getInstance(this)
     }
+    private var isPasswordValid=true
     private lateinit var binding: ActivityLoginBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,6 +33,7 @@ class LoginActivity : AppCompatActivity() {
         setupView()
         setupAction()
         playAnimation()
+        setupPasswordTextWatcher()
     }
 
     private fun setupView() {
@@ -51,7 +55,7 @@ class LoginActivity : AppCompatActivity() {
             viewModel.saveSession(UserModel(email, "sample_token"))
             AlertDialog.Builder(this).apply {
                 setTitle("Yeah!")
-                setMessage("Anda berhasil login. Sudah tidak sabar untuk belajar ya?")
+                setMessage("Anda berhasil login. Sudah tidak sabar untuk upload dan lihat story ya?")
                 setPositiveButton("Lanjut") { _, _ ->
                     val intent = Intent(context, MainActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
@@ -97,5 +101,28 @@ class LoginActivity : AppCompatActivity() {
             startDelay = 100
         }.start()
     }
+
+    private fun setupPasswordTextWatcher() {
+        binding.passwordEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                val password = s.toString()
+                if (password.length < 8) {
+                    binding.passwordErrorTextView.visibility = View.VISIBLE
+                    isPasswordValid = false
+                } else {
+                    binding.passwordErrorTextView.visibility = View.GONE
+                    isPasswordValid = true
+                }
+            }
+        })
+    }
+
+
 
 }

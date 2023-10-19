@@ -4,6 +4,8 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.os.Build
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
@@ -11,8 +13,10 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.dicoding.picodiploma.loginwithanimation.databinding.ActivitySignupBinding
 
+
 class SignupActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignupBinding
+    private var isPasswordValid=true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,6 +26,7 @@ class SignupActivity : AppCompatActivity() {
         setupView()
         setupAction()
         playAnimation()
+        setupPasswordTextWatcher()
     }
 
     private fun setupView() {
@@ -89,5 +94,26 @@ class SignupActivity : AppCompatActivity() {
             )
             startDelay = 100
         }.start()
+    }
+
+    private fun setupPasswordTextWatcher() {
+        binding.passwordEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                val password = s.toString()
+                if (password.length < 8) {
+                    binding.passwordErrorTextView.visibility = View.VISIBLE
+                    isPasswordValid = false
+                } else {
+                    binding.passwordErrorTextView.visibility = View.GONE
+                    isPasswordValid = true
+                }
+            }
+        })
     }
 }
