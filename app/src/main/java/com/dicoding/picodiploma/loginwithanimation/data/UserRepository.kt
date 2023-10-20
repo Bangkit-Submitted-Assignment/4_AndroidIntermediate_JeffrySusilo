@@ -27,6 +27,17 @@ class UserRepository private constructor(
         return apiService.register(name, email, password)
     }
 
+    suspend fun login(email: String, password: String) {
+        val response = apiService.login(email, password)
+        if (response.loginResult != null) {
+            // Login berhasil, simpan token ke dalam DataStore
+            userPreference.saveToken(response.loginResult.token)
+        } else {
+            // Handle kesalahan jika login gagal
+            throw Exception("Login gagal")
+        }
+    }
+
     companion object {
         @Volatile
         private var instance: UserRepository? = null

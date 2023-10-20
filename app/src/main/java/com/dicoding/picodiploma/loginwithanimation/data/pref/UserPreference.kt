@@ -1,6 +1,7 @@
 package com.dicoding.picodiploma.loginwithanimation.data.pref
 
 import android.content.Context
+import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
@@ -31,6 +32,19 @@ class UserPreference private constructor(private val dataStore: DataStore<Prefer
             )
         }
     }
+
+    suspend fun saveToken(token: String?) {
+        if (token != null) {
+            dataStore.edit { preferences ->
+                preferences[TOKEN_KEY] = token
+                preferences[IS_LOGIN_KEY] = true
+            }
+        } else {
+            // Token is null, handle it as needed (e.g., log an error)
+            Log.e("UserPreference", "Token is null")
+        }
+    }
+
 
     suspend fun logout() {
         dataStore.edit { preferences ->
