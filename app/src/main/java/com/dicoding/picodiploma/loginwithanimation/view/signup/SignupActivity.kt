@@ -9,16 +9,23 @@ import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.dicoding.picodiploma.loginwithanimation.databinding.ActivitySignupBinding
+import com.dicoding.picodiploma.loginwithanimation.view.ViewModelFactory
 
 
 class SignupActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignupBinding
+    private lateinit var viewModel: SignupViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySignupBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Inisialisasi ViewModel dengan repository yang sesuai
+        viewModel = ViewModelProvider(this, ViewModelFactory.getInstance(this))
+            .get(SignupViewModel::class.java)
 
         setupView()
         setupAction()
@@ -40,7 +47,12 @@ class SignupActivity : AppCompatActivity() {
 
     private fun setupAction() {
         binding.signupButton.setOnClickListener {
+            val name = binding.nameEditText.text.toString()
             val email = binding.emailEditText.text.toString()
+            val password = binding.passwordEditText.text.toString()
+
+            // Panggil fungsi register dari ViewModel
+            viewModel.register(name, email, password)
 
             AlertDialog.Builder(this).apply {
                 setTitle("Yeah!")

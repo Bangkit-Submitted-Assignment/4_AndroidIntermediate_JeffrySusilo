@@ -1,11 +1,13 @@
 package com.dicoding.picodiploma.loginwithanimation.data
 
+import com.dicoding.picodiploma.loginwithanimation.api.ApiService
 import com.dicoding.picodiploma.loginwithanimation.data.pref.UserModel
 import com.dicoding.picodiploma.loginwithanimation.data.pref.UserPreference
 import kotlinx.coroutines.flow.Flow
 
 class UserRepository private constructor(
-    private val userPreference: UserPreference
+    private val userPreference: UserPreference,
+    private val apiService: ApiService
 ) {
 
     suspend fun saveSession(user: UserModel) {
@@ -20,14 +22,20 @@ class UserRepository private constructor(
         userPreference.logout()
     }
 
+    suspend fun register(name: String, email: String, password: String): RegisterResponse {
+        // Panggil endpoint register dari ApiService
+        return apiService.register(name, email, password)
+    }
+
     companion object {
         @Volatile
         private var instance: UserRepository? = null
         fun getInstance(
-            userPreference: UserPreference
+            userPreference: UserPreference,
+            apiService: ApiService
         ): UserRepository =
             instance ?: synchronized(this) {
-                instance ?: UserRepository(userPreference)
+                instance ?: UserRepository(userPreference,apiService)
             }.also { instance = it }
     }
 }
