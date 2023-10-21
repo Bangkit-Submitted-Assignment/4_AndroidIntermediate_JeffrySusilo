@@ -50,9 +50,11 @@ class LoginActivity : AppCompatActivity() {
             val password = binding.passwordEditText.text.toString()
             //viewModel.saveSession(UserModel(email, "sample_token"))
             viewModel.login(email, password)
+
+
             AlertDialog.Builder(this).apply {
                 setTitle("Yeah!")
-                setMessage("Anda berhasil login. Sudah tidak sabar untuk upload dan lihat story ya?")
+                setMessage("jika anda berhasil login maka akan menuju halaman utama, jika tidak akan dipaksa kembali ke home")
                 setPositiveButton("Lanjut") { _, _ ->
                     val intent = Intent(context, MainActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK

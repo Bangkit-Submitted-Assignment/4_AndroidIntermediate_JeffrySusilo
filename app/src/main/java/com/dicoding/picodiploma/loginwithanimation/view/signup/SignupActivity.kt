@@ -56,7 +56,7 @@ class SignupActivity : AppCompatActivity() {
 
             AlertDialog.Builder(this).apply {
                 setTitle("Yeah!")
-                setMessage("Akun dengan $email sudah jadi nih. Yuk, login dan belajar coding.")
+                setMessage("silahkan coba login dengan $email yang dibuat, untuk mengecek apakah sudah terdaftar jika gagal ulangi register akun")
                 setPositiveButton("Lanjut") { _, _ ->
                     finish()
                 }

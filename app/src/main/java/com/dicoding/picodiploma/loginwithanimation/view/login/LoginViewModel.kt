@@ -8,19 +8,20 @@ import com.dicoding.picodiploma.loginwithanimation.data.pref.UserModel
 import kotlinx.coroutines.launch
 
 class LoginViewModel(private val repository: UserRepository) : ViewModel() {
+
     fun saveSession(user: UserModel) {
         viewModelScope.launch {
             repository.saveSession(user)
         }
     }
 
-    fun login(email: String, password: String) {
+    fun login(email: String, password: String){
         viewModelScope.launch {
             try {
                 // Panggil fungsi login dari repository
                 repository.login(email, password)
 
-                // Login berhasil, lakukan sesuatu (misalnya, tampilkan pesan sukses atau arahkan ke halaman utama)
+
             } catch (e: Exception) {
                 // Login gagal, catat pesan kesalahan ke dalam log
                 Log.e("LoginViewModel", "Login gagal: ${e.message}")
