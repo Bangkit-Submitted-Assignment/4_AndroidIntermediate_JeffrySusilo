@@ -7,6 +7,12 @@ import kotlinx.coroutines.launch
 
 class SignupViewModel(private val userRepository: UserRepository) : ViewModel() {
 
+//    val user: LiveData<UserModel> = liveData {
+//        userRepository.getUser().collect { userModel ->
+//            emit(userModel)
+//        }
+//    }
+
     fun register(name: String, email: String, password: String) {
         viewModelScope.launch {
 

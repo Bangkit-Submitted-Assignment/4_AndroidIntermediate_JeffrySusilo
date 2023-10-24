@@ -54,7 +54,7 @@ class LoginActivity : AppCompatActivity() {
 
             AlertDialog.Builder(this).apply {
                 setTitle("Yeah!")
-                setMessage("jika anda berhasil login maka akan menuju halaman utama, jika tidak akan dipaksa kembali ke home")
+                setMessage("jika anda berhasil login maka akan menuju halaman utama, jika tidak akan dipaksa kembali ke home coba ulangi register atau login")
                 setPositiveButton("Lanjut") { _, _ ->
                     val intent = Intent(context, MainActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK

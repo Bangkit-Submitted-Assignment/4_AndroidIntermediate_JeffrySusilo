@@ -38,6 +38,11 @@ class UserRepository private constructor(
         }
     }
 
+    suspend fun getStory():StoryResponse{
+        // Panggil fungsi getStories dari apiService
+        return apiService.getStories()
+    }
+
     companion object {
         @Volatile
         private var instance: UserRepository? = null
