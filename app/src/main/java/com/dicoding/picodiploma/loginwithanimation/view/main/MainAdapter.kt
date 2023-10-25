@@ -1,5 +1,6 @@
 package com.dicoding.picodiploma.loginwithanimation.view.main
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,6 +30,8 @@ class MainAdapter(var stories: List<ListStoryItem?>) :
         val story = stories[position]
         holder.nameTextView.text = story?.name
         holder.descriptionTextView.text = story?.description
+
+        Log.d("Image URL", story?.photoUrl ?: "URL gambar kosong")
 
         Picasso.get()
             .load(story?.photoUrl)
