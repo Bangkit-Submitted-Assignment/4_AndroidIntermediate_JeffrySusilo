@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.dicoding.picodiploma.loginwithanimation.data.DetailStoryResponse
 import com.dicoding.picodiploma.loginwithanimation.data.ListStoryItem
 import com.dicoding.picodiploma.loginwithanimation.data.UserRepository
 import com.dicoding.picodiploma.loginwithanimation.data.pref.UserModel
@@ -35,6 +36,21 @@ class MainViewModel(private val repository: UserRepository) : ViewModel() {
                 // Anda dapat menampilkan pesan kesalahan atau melakukan tindakan lain yang sesuai
             }
         }
+    }
+
+    fun getDetailStory(storyId: String): LiveData<DetailStoryResponse> {
+        val detailStoryLiveData = MutableLiveData<DetailStoryResponse>()
+        viewModelScope.launch {
+            try {
+                // Panggil fungsi getDetailStory dari repository dengan storyId yang diberikan
+                val response = repository.getDetailStory(storyId)
+                detailStoryLiveData.postValue(response)
+            } catch (e: Exception) {
+                // Tangani jika terjadi kesalahan saat memuat detail cerita
+                // Anda dapat menampilkan pesan kesalahan atau melakukan tindakan lain yang sesuai
+            }
+        }
+        return detailStoryLiveData
     }
 
     fun logout() {

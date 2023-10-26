@@ -45,7 +45,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() {
-        mainAdapter = MainAdapter(emptyList())
+        mainAdapter = MainAdapter(emptyList()) { storyId ->
+            // Panggil intent untuk membuka DetailStoryActivity dengan storyId yang dipilih
+            val intent = Intent(this, DetailStoryActivity::class.java)
+            intent.putExtra("STORY_ID", storyId)
+            startActivity(intent)
+        }
         binding.storyRecycleView.adapter = mainAdapter
         binding.storyRecycleView.layoutManager = LinearLayoutManager(this)
     }

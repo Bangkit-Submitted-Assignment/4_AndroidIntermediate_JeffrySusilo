@@ -43,6 +43,11 @@ class UserRepository private constructor(
         return apiService.getStories()
     }
 
+    suspend fun getDetailStory(storyId: String): DetailStoryResponse {
+        // Panggil fungsi getDetailStory dari apiService dengan storyId yang diberikan
+        return apiService.getDetailStory(storyId)
+    }
+
     companion object {
         @Volatile
         private var instance: UserRepository? = null
