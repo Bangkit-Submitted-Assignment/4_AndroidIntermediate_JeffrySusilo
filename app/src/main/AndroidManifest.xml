@@ -32,6 +32,11 @@
             android:name=".view.main.DetailStoryActivity"
             android:label="Detail Story">
         </activity>
+        <activity
+            android:name=".view.upload.AddActivity"
+            android:label="Add">
+        </activity>
+
 
     </application>
 
