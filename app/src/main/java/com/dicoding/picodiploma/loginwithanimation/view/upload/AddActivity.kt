@@ -1,5 +1,6 @@
 package com.dicoding.picodiploma.loginwithanimation.view.upload
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -17,6 +18,7 @@ import com.dicoding.picodiploma.loginwithanimation.data.pref.dataStore
 import com.dicoding.picodiploma.loginwithanimation.data.reduceFileImage
 import com.dicoding.picodiploma.loginwithanimation.data.uriToFile
 import com.dicoding.picodiploma.loginwithanimation.databinding.ActivityAddBinding
+import com.dicoding.picodiploma.loginwithanimation.view.main.MainActivity
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaType
@@ -97,6 +99,7 @@ class AddActivity : AppCompatActivity() {
                     val successResponse = apiService.uploadStory(multipartBody, requestBody)
                     showToast(successResponse.message)
                     showLoading(false)
+                    navigateToListActivity()
                 } catch (e: HttpException) {
                     val errorBody = e.response()?.errorBody()?.string()
                     val errorResponse = Gson().fromJson(errorBody, AddNewStoryResponse::class.java)
@@ -113,6 +116,12 @@ class AddActivity : AppCompatActivity() {
 
     private fun showToast(message: String?) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun navigateToListActivity() {
+        val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(intent)
     }
 
 }
