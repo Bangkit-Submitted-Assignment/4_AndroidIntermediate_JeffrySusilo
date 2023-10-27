@@ -36,6 +36,10 @@
             android:name=".view.upload.AddActivity"
             android:label="Add">
         </activity>
+        <activity
+            android:name=".view.upload.CameraActivity"
+            android:label="Camera">
+        </activity>
 
 
     </application>
