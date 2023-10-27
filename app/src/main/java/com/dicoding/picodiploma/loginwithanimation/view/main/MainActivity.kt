@@ -11,10 +11,13 @@ import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.dicoding.picodiploma.loginwithanimation.R
 import com.dicoding.picodiploma.loginwithanimation.customView.PasswordErrorCustomView
 import com.dicoding.picodiploma.loginwithanimation.databinding.ActivityMainBinding
 import com.dicoding.picodiploma.loginwithanimation.view.ViewModelFactory
+import com.dicoding.picodiploma.loginwithanimation.view.upload.AddActivity
 import com.dicoding.picodiploma.loginwithanimation.view.welcome.WelcomeActivity
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity() {
     private val viewModel by viewModels<MainViewModel> {
@@ -39,6 +42,7 @@ class MainActivity : AppCompatActivity() {
         setupView()
         setupRecyclerView()
         setupAction()
+        setupFloatingActionButton()
         viewModel.getStory()
         playAnimation()
 
@@ -101,5 +105,17 @@ class MainActivity : AppCompatActivity() {
             playSequentially(name,message,logout)
             startDelay = 100
         }.start()
+    }
+
+    private fun setupFloatingActionButton() {
+        val fabAdd = findViewById<FloatingActionButton>(R.id.fabAdd)
+        fabAdd.setOnClickListener {
+            navigateToAddActivity()
+        }
+    }
+
+    private fun navigateToAddActivity() {
+        val intent = Intent(this, AddActivity::class.java)
+        startActivity(intent)
     }
 }
