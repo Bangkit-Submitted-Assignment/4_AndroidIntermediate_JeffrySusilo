@@ -76,7 +76,7 @@ class AddActivity : AppCompatActivity() {
         currentImageUri?.let { uri ->
             val imageFile = uriToFile(uri, this).reduceFileImage()
             Log.d("Image File", "showImage: ${imageFile.path}")
-            val description = "Ini adalah deksripsi gambar"
+            val description = binding.deskripsiEditText.text.toString()
 
             showLoading(true)
 
