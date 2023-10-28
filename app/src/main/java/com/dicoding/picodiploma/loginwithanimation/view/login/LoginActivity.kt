@@ -49,20 +49,22 @@ class LoginActivity : AppCompatActivity() {
             val email = binding.emailEditText.text.toString()
             val password = binding.passwordEditText.text.toString()
             //viewModel.saveSession(UserModel(email, "sample_token"))
-            viewModel.login(email, password)
-
-
-            AlertDialog.Builder(this).apply {
-                setTitle("Yeah!")
-                setMessage("jika anda berhasil login maka akan menuju halaman utama, jika tidak akan dipaksa kembali ke home coba ulangi register atau login")
-                setPositiveButton("Lanjut") { _, _ ->
-                    val intent = Intent(context, MainActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                    startActivity(intent)
-                    finish()
+            viewModel.login(email, password) { loginSuccess ->
+                if (loginSuccess) {
+                    // Login berhasil, pindahkan kode yang menampilkan AlertDialog ke sini
+                    AlertDialog.Builder(this).apply {
+                        setTitle("Yeah!")
+                        setMessage("jika anda berhasil login maka akan menuju halaman utama.")
+                        setPositiveButton("Lanjut") { _, _ ->
+                            val intent = Intent(context, MainActivity::class.java)
+                            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                            startActivity(intent)
+                            finish()
+                        }
+                        create()
+                        show()
+                    }
                 }
-                create()
-                show()
             }
         }
     }

@@ -13,7 +13,7 @@ class SignupViewModel(private val userRepository: UserRepository) : ViewModel() 
 //        }
 //    }
 
-    fun register(name: String, email: String, password: String) {
+    fun register(name: String, email: String, password: String, callback: (Boolean) -> Unit) {
         viewModelScope.launch {
 
             try {
@@ -23,10 +23,13 @@ class SignupViewModel(private val userRepository: UserRepository) : ViewModel() 
                 // Registrasi berhasil, tampilkan pesan sukses dan catat pesan log
                 Log.i("SignupViewModel", "Registrasi berhasil: $response")
 
+                callback(true)
+
             } catch (e: Exception) {
                 // Registrasi gagal, catat pesan kesalahan ke dalam log
                 Log.e("SignupViewModel", "Registrasi gagal: ${e.message}")
                 e.printStackTrace()
+                callback(false)
             }
         }
     }

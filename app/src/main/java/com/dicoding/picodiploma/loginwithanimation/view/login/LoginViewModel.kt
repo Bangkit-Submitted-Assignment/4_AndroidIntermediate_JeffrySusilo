@@ -15,17 +15,19 @@ class LoginViewModel(private val repository: UserRepository) : ViewModel() {
         }
     }
 
-    fun login(email: String, password: String){
+    fun login(email: String, password: String,callback: (Boolean) -> Unit){
         viewModelScope.launch {
             try {
                 // Panggil fungsi login dari repository
                 repository.login(email, password)
+                callback(true)
 
 
             } catch (e: Exception) {
                 // Login gagal, catat pesan kesalahan ke dalam log
                 Log.e("LoginViewModel", "Login gagal: ${e.message}")
                 e.printStackTrace()
+                callback(false)
             }
         }
     }

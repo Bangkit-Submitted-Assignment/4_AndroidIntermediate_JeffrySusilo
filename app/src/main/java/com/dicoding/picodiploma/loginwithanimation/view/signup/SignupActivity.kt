@@ -51,17 +51,18 @@ class SignupActivity : AppCompatActivity() {
             val email = binding.emailEditText.text.toString()
             val password = binding.passwordEditText.text.toString()
 
-            // Panggil fungsi register dari ViewModel
-            viewModel.register(name, email, password)
-
-            AlertDialog.Builder(this).apply {
-                setTitle("Yeah!")
-                setMessage("silahkan coba login dengan $email yang dibuat, untuk mengecek apakah sudah terdaftar jika gagal ulangi register akun dengan benar atau periksa kembali email dan password yang di login kan")
-                setPositiveButton("Lanjut") { _, _ ->
-                    finish()
+            viewModel.register(name, email, password) { registrationSuccess ->
+                if (registrationSuccess) {
+                    AlertDialog.Builder(this).apply {
+                        setTitle("Yeah!")
+                        setMessage("silahkan coba login dengan $email yang dibuat, untuk mengecek apakah sudah terdaftar jika gagal ulangi register akun dengan benar atau periksa kembali email dan password yang di login kan")
+                        setPositiveButton("Lanjut") { _, _ ->
+                            finish()
+                        }
+                        create()
+                        show()
+                    }
                 }
-                create()
-                show()
             }
         }
     }
