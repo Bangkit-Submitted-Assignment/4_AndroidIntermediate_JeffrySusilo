@@ -4,6 +4,11 @@ import com.dicoding.picodiploma.loginwithanimation.api.ApiService
 import com.dicoding.picodiploma.loginwithanimation.data.pref.UserModel
 import com.dicoding.picodiploma.loginwithanimation.data.pref.UserPreference
 import kotlinx.coroutines.flow.Flow
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import java.io.File
 
 class UserRepository private constructor(
     private val userPreference: UserPreference,
@@ -40,13 +45,38 @@ class UserRepository private constructor(
 
     suspend fun getStory():StoryResponse{
         // Panggil fungsi getStories dari apiService
-        return apiService.getStories()
+        val token = userPreference.getToken() ?: ""
+
+        // Panggil fungsi getStories dari apiService dengan token
+        return apiService.getStories("Bearer $token")
     }
 
     suspend fun getDetailStory(storyId: String): DetailStoryResponse {
-        // Panggil fungsi getDetailStory dari apiService dengan storyId yang diberikan
-        return apiService.getDetailStory(storyId)
+        val token = userPreference.getToken() ?: ""
+
+        // Panggil fungsi getDetailStory dari apiService dengan token
+        return apiService.getDetailStory("Bearer $token", storyId)
     }
+
+    suspend fun uploadStory(
+        imageFile: File,
+        description: String
+    ): AddNewStoryResponse {
+        val token = userPreference.getToken() ?: ""
+
+        val requestImageFile = imageFile.reduceFileImage().asRequestBody("image/jpeg".toMediaType())
+        val descriptionRequestBody = description.toRequestBody("text/plain".toMediaType())
+
+        val multipartBody = MultipartBody.Part.createFormData(
+            "photo",
+            imageFile.name,
+            requestImageFile
+        )
+
+        return apiService.uploadStory("Bearer $token", multipartBody, descriptionRequestBody)
+    }
+
+
 
     companion object {
         @Volatile
