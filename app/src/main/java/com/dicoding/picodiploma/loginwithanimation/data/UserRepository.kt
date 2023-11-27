@@ -53,9 +53,13 @@ class UserRepository private constructor(
 
     suspend fun getDetailStory(storyId: String): DetailStoryResponse {
         val token = userPreference.getToken() ?: ""
-
         // Panggil fungsi getDetailStory dari apiService dengan token
         return apiService.getDetailStory("Bearer $token", storyId)
+    }
+
+    suspend fun getStoriesWithLocation(): StoryResponse{
+        val token = userPreference.getToken() ?: ""
+        return apiService.getStoriesWithLocation("Bearer $token")
     }
 
     suspend fun uploadStory(

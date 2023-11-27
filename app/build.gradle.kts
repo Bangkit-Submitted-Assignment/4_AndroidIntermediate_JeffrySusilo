@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("kotlin-android")
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 android {
@@ -61,5 +62,7 @@ dependencies {
     implementation ("androidx.recyclerview:recyclerview:1.2.1")
 
     implementation ("com.squareup.picasso:picasso:2.71828")
+
+    implementation ("com.google.android.gms:play-services-maps:18.0.2")
 
 }

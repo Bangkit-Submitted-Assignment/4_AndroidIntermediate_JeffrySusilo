@@ -53,6 +53,21 @@ class MainViewModel(private val repository: UserRepository) : ViewModel() {
         return detailStoryLiveData
     }
 
+    fun getStoriesWithLocation() {
+        viewModelScope.launch {
+            try {
+                // Panggil fungsi getStoriesWithLocation dari repository
+                val response = repository.getStoriesWithLocation()
+                val stories = response.listStory ?: emptyList()
+                storyResponse.postValue(stories)
+            } catch (e: Exception) {
+                // Tangani jika terjadi kesalahan saat memuat cerita dengan lokasi
+                // Anda dapat menampilkan pesan kesalahan atau melakukan tindakan lain yang sesuai
+            }
+        }
+    }
+
+
     fun logout() {
         viewModelScope.launch {
             repository.logout()

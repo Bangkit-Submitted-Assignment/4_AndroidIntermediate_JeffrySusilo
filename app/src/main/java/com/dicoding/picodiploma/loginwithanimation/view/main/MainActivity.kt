@@ -8,13 +8,16 @@ import android.os.Bundle
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
+import android.widget.ImageButton
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dicoding.picodiploma.loginwithanimation.R
 import com.dicoding.picodiploma.loginwithanimation.customView.PasswordErrorCustomView
 import com.dicoding.picodiploma.loginwithanimation.databinding.ActivityMainBinding
 import com.dicoding.picodiploma.loginwithanimation.view.ViewModelFactory
+import com.dicoding.picodiploma.loginwithanimation.view.maps.MapsActivity
 import com.dicoding.picodiploma.loginwithanimation.view.upload.AddActivity
 import com.dicoding.picodiploma.loginwithanimation.view.welcome.WelcomeActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -40,6 +43,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         setupView()
+        setupToolbar()
         setupRecyclerView()
         setupAction()
         setupFloatingActionButton()
@@ -59,6 +63,22 @@ class MainActivity : AppCompatActivity() {
         binding.storyRecycleView.layoutManager = LinearLayoutManager(this)
     }
 
+    private fun setupToolbar() {
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
+
+        // Set click listener for the map button
+        val mapButton: ImageButton = findViewById(R.id.mapButton)
+        mapButton.setOnClickListener {
+            handleMapButtonClick()
+        }
+    }
+
+    private fun handleMapButtonClick() {
+        val intent = Intent(this, MapsActivity::class.java)
+        startActivity(intent)
+    }
+
     private fun setupView() {
         @Suppress("DEPRECATION")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -69,7 +89,8 @@ class MainActivity : AppCompatActivity() {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN
             )
         }
-        supportActionBar?.hide()
+
+        supportActionBar?.title="List Story"
     }
 
     private fun setupAction() {
