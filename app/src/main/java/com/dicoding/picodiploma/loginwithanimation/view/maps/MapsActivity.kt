@@ -51,6 +51,32 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
 
-        viewModel.getStoriesWithLocation()
+        displayMarkers()
+
     }
+
+    private fun displayMarkers() {
+        // Panggil fungsi getStoriesWithLocation dari MainViewModel
+        viewModel.getStoriesWithLocation()
+
+        // Tambahkan observer untuk hasil getStoriesWithLocation
+        viewModel.getStoryResponse().observe(this, { stories ->
+            // Hapus semua marker yang ada sebelumnya
+            mMap.clear()
+
+            // Tambahkan marker baru berdasarkan data yang didapat dari viewModel
+            stories.forEach { story ->
+                val latLng = LatLng(story?.lat?: 0.0, story?.lon?: 0.0)
+                mMap.addMarker(
+                    MarkerOptions()
+                        .position(latLng)
+                        .title(story?.name)
+                        .snippet(story?.description)
+                )
+            }
+        })
+    }
+
+
+
 }
