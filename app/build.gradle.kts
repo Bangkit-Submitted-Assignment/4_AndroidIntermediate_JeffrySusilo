@@ -65,4 +65,6 @@ dependencies {
 
     implementation ("com.google.android.gms:play-services-maps:18.0.2")
 
+    implementation("androidx.paging:paging-runtime-ktx:3.1.0")
+
 }

@@ -1,19 +1,35 @@
 package com.dicoding.picodiploma.loginwithanimation.view.main
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
 import com.dicoding.picodiploma.loginwithanimation.data.DetailStoryResponse
 import com.dicoding.picodiploma.loginwithanimation.data.ListStoryItem
 import com.dicoding.picodiploma.loginwithanimation.data.UserRepository
 import com.dicoding.picodiploma.loginwithanimation.data.pref.UserModel
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+
 
 class MainViewModel(private val repository: UserRepository) : ViewModel() {
 
     private val storyResponse = MutableLiveData<List<ListStoryItem?>>()
+
+    val story: LiveData<PagingData<ListStoryItem>> = liveData {
+        try {
+            repository.getStoryPager().collectLatest {
+                emit(it)
+            }
+        } catch (e: Exception) {
+            // Handle the error if needed
+            Log.e("MainViewModel", "Error getting story pager", e)
+        }
+    }
 
     fun getStoryResponse(): LiveData<List<ListStoryItem?>> {
         return storyResponse

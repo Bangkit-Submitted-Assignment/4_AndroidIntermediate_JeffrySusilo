@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() {
-        mainAdapter = MainAdapter(emptyList()) { storyId ->
+        mainAdapter = MainAdapter { storyId ->
             // Panggil intent untuk membuka DetailStoryActivity dengan storyId yang dipilih
             val intent = Intent(this, DetailStoryActivity::class.java)
             intent.putExtra("STORY_ID", storyId)
@@ -62,6 +62,7 @@ class MainActivity : AppCompatActivity() {
         binding.storyRecycleView.adapter = mainAdapter
         binding.storyRecycleView.layoutManager = LinearLayoutManager(this)
     }
+
 
     private fun setupToolbar() {
         val toolbar: Toolbar = findViewById(R.id.toolbar)
@@ -100,11 +101,10 @@ class MainActivity : AppCompatActivity() {
             binding.nameTextView.text = user.email
         })
 
-        viewModel.getStoryResponse().observe(this, { stories ->
-            // Update adapter dengan daftar cerita yang diterima
-            mainAdapter.stories = stories
-            mainAdapter.notifyDataSetChanged()
+        viewModel.story.observe(this, { pagingData ->
+            mainAdapter.submitData(lifecycle, pagingData)
         })
+
 
         binding.logoutButton.setOnClickListener {
             viewModel.logout()
