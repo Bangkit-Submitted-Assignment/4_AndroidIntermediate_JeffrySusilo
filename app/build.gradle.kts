@@ -65,6 +65,15 @@ dependencies {
 
     implementation ("com.google.android.gms:play-services-maps:18.0.2")
 
-    implementation("androidx.paging:paging-runtime-ktx:3.1.0")
+    implementation ("androidx.paging:paging-runtime-ktx:3.1.1")
+    implementation ("androidx.room:room-paging:2.4.2")
 
+    androidTestImplementation ("androidx.arch.core:core-testing:2.1.0") //InstantTaskExecutorRule
+    androidTestImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.1") //TestDispatcher
+    testImplementation ("androidx.arch.core:core-testing:2.1.0") // InstantTaskExecutorRule
+    testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.1") //TestDispatcher
+
+    //mockito
+    testImplementation ("org.mockito:mockito-core:4.4.0")
+    testImplementation ("org.mockito:mockito-inline:4.4.0")
 }
