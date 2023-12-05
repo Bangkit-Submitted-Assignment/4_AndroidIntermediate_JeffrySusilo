@@ -2,6 +2,7 @@ package com.dicoding.picodiploma.loginwithanimation.ui
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.paging.AsyncPagingDataDiffer
 import androidx.paging.PagingData
 import androidx.paging.PagingSource
@@ -16,7 +17,6 @@ import com.dicoding.picodiploma.loginwithanimation.view.main.MainAdapter
 import com.dicoding.picodiploma.loginwithanimation.view.main.MainViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert
 import org.junit.Rule
@@ -24,8 +24,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito
+import org.mockito.Mockito.`when`
 import org.mockito.junit.MockitoJUnitRunner
-
 
 @ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
@@ -39,19 +39,19 @@ class MainViewModelTest {
     @Mock
     private lateinit var quoteRepository: UserRepository
 
-//    private val token = DataDummy().token
+    val token = DataDummy.token
 
     @Test
-    fun whenGetQuoteShouldNotNullandReturnData() = runTest {
-        val dummyQuote = DataDummy().generateDummyQuoteResponse()
-//        val data: PagingData<QuoteResponseItem> = PagingData.from(dummyQuote)
+    fun `when Get Quote Should Not Null and Return Data`() = runTest {
+        val dummyQuote = DataDummy.generateDummyStoryResponse()
+//        val data: PagingData<ListStoryItem> = PagingData.from(dummyQuote)
         val data: PagingData<ListStoryItem> = QuotePagingSource.snapshot(dummyQuote)
-        val expectedQuote = MutableStateFlow<PagingData<ListStoryItem>>(data)
+        val expectedQuote = MutableLiveData<PagingData<ListStoryItem>>()
         expectedQuote.value = data
-        Mockito.`when`(quoteRepository.getStoryPager()).thenReturn(expectedQuote)
+        `when`(quoteRepository.getStoryPager(token)).thenReturn(expectedQuote)
 
         val mainViewModel = MainViewModel(quoteRepository)
-        val actualQuote: PagingData<ListStoryItem> = mainViewModel.story.getOrAwaitValue()
+        val actualQuote: PagingData<ListStoryItem> = mainViewModel.getStoryPager(token).getOrAwaitValue()
 
         val differ = AsyncPagingDataDiffer(
             diffCallback = MainAdapter.DIFF_CALLBACK,
@@ -66,14 +66,14 @@ class MainViewModelTest {
     }
 
     @Test
-    fun whenGetQuoteEmptyShouldReturnNoData() = runTest {
+    fun `when Get Quote Empty Should Return No Data`() = runTest {
         val data: PagingData<ListStoryItem> = PagingData.from(emptyList())
-        val expectedQuote = MutableStateFlow<PagingData<ListStoryItem>>(data)
+        val expectedQuote = MutableLiveData<PagingData<ListStoryItem>>()
         expectedQuote.value = data
-        Mockito.`when`(quoteRepository.getStoryPager()).thenReturn(expectedQuote)
+        Mockito.`when`(quoteRepository.getStoryPager(token)).thenReturn(expectedQuote)
 
         val mainViewModel = MainViewModel(quoteRepository)
-        val actualQuote: PagingData<ListStoryItem> = mainViewModel.story.getOrAwaitValue()
+        val actualQuote: PagingData<ListStoryItem> = mainViewModel.getStoryPager(token).getOrAwaitValue()
 
         val differ = AsyncPagingDataDiffer(
             diffCallback = MainAdapter.DIFF_CALLBACK,

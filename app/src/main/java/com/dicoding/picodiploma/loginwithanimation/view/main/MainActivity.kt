@@ -5,6 +5,7 @@ import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
@@ -19,7 +20,6 @@ import com.dicoding.picodiploma.loginwithanimation.databinding.ActivityMainBindi
 import com.dicoding.picodiploma.loginwithanimation.view.ViewModelFactory
 import com.dicoding.picodiploma.loginwithanimation.view.maps.MapsActivity
 import com.dicoding.picodiploma.loginwithanimation.view.upload.AddActivity
-import com.dicoding.picodiploma.loginwithanimation.view.welcome.WelcomeActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity() {
@@ -35,10 +35,19 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel.getSession().observe(this) { user ->
-            if (!user.isLogin) {
-                startActivity(Intent(this, WelcomeActivity::class.java))
-                finish()
+        viewModel.getSession().observe(this) {user ->
+            val token = user.token
+            Log.d("INI TOKEN", token)
+            val adapter = mainAdapter
+            binding.storyRecycleView.adapter = adapter.withLoadStateFooter(
+                footer = LoadingStateAdapter {
+                    adapter.retry()
+                }
+            )
+            viewModel.getStoryPager(token).observe(this) {stories ->
+                if (stories != null) {
+                    adapter.submitData(lifecycle, stories)
+                }
             }
         }
 
@@ -47,7 +56,7 @@ class MainActivity : AppCompatActivity() {
         setupRecyclerView()
         setupAction()
         setupFloatingActionButton()
-        viewModel.getStory()
+        //viewModel.getStory()
         playAnimation()
 
     }
@@ -95,16 +104,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupAction() {
-
-        viewModel.getSession().observe(this, { user ->
-            // Update tampilan berdasarkan sesi pengguna
-            binding.nameTextView.text = user.email
-        })
-
-        viewModel.story.observe(this, { pagingData ->
-            mainAdapter.submitData(lifecycle, pagingData)
-        })
-
 
         binding.logoutButton.setOnClickListener {
             viewModel.logout()

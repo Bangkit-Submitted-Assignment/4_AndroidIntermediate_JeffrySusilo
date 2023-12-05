@@ -1,8 +1,11 @@
 package com.dicoding.picodiploma.loginwithanimation.data
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import androidx.paging.liveData
 import com.dicoding.picodiploma.loginwithanimation.api.ApiService
 import com.dicoding.picodiploma.loginwithanimation.data.pref.UserModel
 import com.dicoding.picodiploma.loginwithanimation.data.pref.UserPreference
@@ -65,15 +68,19 @@ class UserRepository private constructor(
         return apiService.getStoriesWithLocation("Bearer $token")
     }
 
-    suspend fun getStoryPager(): Flow<PagingData<ListStoryItem>> {
-        val token = userPreference.getToken() ?: ""
-        return Pager(
-            config = PagingConfig(
-                pageSize = 20,
-                enablePlaceholders = false
-            ),
-            pagingSourceFactory = { StoryPagingSource(apiService,"Bearer $token") }
-        ).flow
+    fun getStoryPager(token:String): LiveData<PagingData<ListStoryItem>> {
+        return try {
+            Pager(
+                config = PagingConfig(
+                    pageSize = 5
+                ),
+                pagingSourceFactory = {
+                    StoryPagingSource(apiService,"Bearer $token")
+                }
+            ).liveData
+        } catch (e: Exception) {
+            MutableLiveData()
+        }
     }
 
     suspend fun uploadStory(
