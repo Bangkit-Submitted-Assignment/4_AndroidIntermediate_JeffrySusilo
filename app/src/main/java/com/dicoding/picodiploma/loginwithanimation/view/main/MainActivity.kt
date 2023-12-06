@@ -20,6 +20,7 @@ import com.dicoding.picodiploma.loginwithanimation.databinding.ActivityMainBindi
 import com.dicoding.picodiploma.loginwithanimation.view.ViewModelFactory
 import com.dicoding.picodiploma.loginwithanimation.view.maps.MapsActivity
 import com.dicoding.picodiploma.loginwithanimation.view.upload.AddActivity
+import com.dicoding.picodiploma.loginwithanimation.view.welcome.WelcomeActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity() {
@@ -35,18 +36,30 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel.getSession().observe(this) {user ->
-            val token = user.token
-            Log.d("INI TOKEN", token)
-            val adapter = mainAdapter
-            binding.storyRecycleView.adapter = adapter.withLoadStateFooter(
-                footer = LoadingStateAdapter {
-                    adapter.retry()
-                }
-            )
-            viewModel.getStoryPager(token).observe(this) {stories ->
-                if (stories != null) {
-                    adapter.submitData(lifecycle, stories)
+        viewModel.getSession().observe(this) { user ->
+            if (!user.isLogin) {
+
+                // Jika user belum login, arahkan ke WelcomeActivity
+                startActivity(Intent(this, WelcomeActivity::class.java))
+                finish()
+
+
+            } else {
+                // Sesuai dengan skenario, pastikan user sudah login
+                val token = user.token
+                Log.d("INI TOKEN", token)
+
+                val adapter = mainAdapter
+                binding.storyRecycleView.adapter = adapter.withLoadStateFooter(
+                    footer = LoadingStateAdapter {
+                        adapter.retry()
+                    }
+                )
+
+                viewModel.getStoryPager(token).observe(this) { stories ->
+                    if (stories != null) {
+                        adapter.submitData(lifecycle, stories)
+                    }
                 }
             }
         }
